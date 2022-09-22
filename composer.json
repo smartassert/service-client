@@ -20,10 +20,7 @@
             "@cs-phpcs"
         ],
         "static-analysis": "./vendor/bin/phpstan",
-        "test": [
-            "./vendor/bin/phpunit --colors=always tests/Unit",
-            "./vendor/bin/phpunit --colors=always tests/Functional"
-        ],
+        "test": "./vendor/bin/phpunit --colors=always tests",
         "ci": [
             "@composer cs",
             "@composer static-analysis",
@@ -53,7 +50,8 @@
         "guzzlehttp/guzzle": "^7.4",
         "symfony/uid": "^6.1",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-phpunit": "^1.1"
+        "phpstan/phpstan-phpunit": "^1.1",
+        "webignition/http-history-container": "^2.5"
     },
     "minimum-stability":"stable",
     "prefer-stable":true,
