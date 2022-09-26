@@ -23,6 +23,7 @@ use SmartAssert\ServiceClient\Exception\NonSuccessResponseException;
 use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Request;
+use SmartAssert\ServiceClient\ResponseDecoder;
 use webignition\HttpHistoryContainer\Container as HttpHistoryContainer;
 
 class ClientTest extends TestCase
@@ -42,7 +43,12 @@ class ClientTest extends TestCase
         $handlerStack->push(Middleware::history($this->httpHistoryContainer));
 
         $httpFactory = new HttpFactory();
-        $this->client = new Client($httpFactory, $httpFactory, new HttpClient(['handler' => $handlerStack]));
+        $this->client = new Client(
+            $httpFactory,
+            $httpFactory,
+            new HttpClient(['handler' => $handlerStack]),
+            new ResponseDecoder(),
+        );
     }
 
     public function testSendRequestNonSuccessfulResponse(): void

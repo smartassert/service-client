@@ -21,6 +21,7 @@ class Client
         private readonly RequestFactoryInterface $requestFactory,
         private readonly StreamFactoryInterface $streamFactory,
         private readonly HttpClientInterface $httpClient,
+        private readonly ResponseDecoder $responseDecoder,
     ) {
     }
 
@@ -68,18 +69,6 @@ class Client
     {
         $response = $this->sendRequest($request);
 
-        $expectedContentType = 'application/json';
-        $actualContentType = $response->getHeaderLine('content-type');
-
-        if ($expectedContentType !== $actualContentType) {
-            throw new InvalidResponseContentException($expectedContentType, $actualContentType, $response);
-        }
-
-        $data = json_decode($response->getBody()->getContents(), true);
-        if (!is_array($data)) {
-            throw new InvalidResponseDataException('array', gettype($data), $response);
-        }
-
-        return $data;
+        return $this->responseDecoder->decodedJsonResponse($response);
     }
 }
