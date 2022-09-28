@@ -24,6 +24,7 @@ use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Request;
 use SmartAssert\ServiceClient\ResponseDecoder;
+use SmartAssert\ServiceClient\Tests\SerializablePayload;
 use webignition\HttpHistoryContainer\Container as HttpHistoryContainer;
 
 class ClientTest extends TestCase
@@ -207,9 +208,22 @@ class ClientTest extends TestCase
                     $textPlainPayload
                 ),
             ],
-            'POST with no authentication, json payload' => [
+            'POST with no authentication, json payload with array' => [
                 'request' => (new Request('POST', 'http://example.com/post'))
                     ->withPayload(new JsonPayload($jsonPayloadData)),
+                'expectedSentRequest' => new GuzzleRequest(
+                    'POST',
+                    'http://example.com/post',
+                    [
+                        'Content-Type' => 'application/json',
+                        'Content-Length' => (string) strlen($jsonPayload)
+                    ],
+                    $jsonPayload
+                ),
+            ],
+            'POST with no authentication, json payload with JsonSerializable' => [
+                'request' => (new Request('POST', 'http://example.com/post'))
+                    ->withPayload(new JsonPayload(new SerializablePayload($jsonPayloadData))),
                 'expectedSentRequest' => new GuzzleRequest(
                     'POST',
                     'http://example.com/post',
