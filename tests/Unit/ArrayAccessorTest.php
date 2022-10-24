@@ -19,20 +19,20 @@ class ArrayAccessorTest extends TestCase
     }
 
     /**
-     * @dataProvider getStringValueDataProvider
+     * @dataProvider getStringDataProvider
      *
      * @param non-empty-string $key
      * @param array<mixed>     $data
      */
-    public function testGetStringValue(string $key, array $data, ?string $expected): void
+    public function testGetString(string $key, array $data, ?string $expected): void
     {
-        self::assertSame($expected, $this->arrayAccessor->getStringValue($key, $data));
+        self::assertSame($expected, $this->arrayAccessor->getString($key, $data));
     }
 
     /**
      * @return array<mixed>
      */
-    public function getStringValueDataProvider(): array
+    public function getStringDataProvider(): array
     {
         return [
             'empty data' => [
@@ -72,20 +72,20 @@ class ArrayAccessorTest extends TestCase
     }
 
     /**
-     * @dataProvider getIntegerValueDataProvider
+     * @dataProvider getIntegerDataProvider
      *
      * @param non-empty-string $key
      * @param array<mixed>     $data
      */
-    public function testGetIntegerValue(string $key, array $data, ?int $expected): void
+    public function testGetInteger(string $key, array $data, ?int $expected): void
     {
-        self::assertSame($expected, $this->arrayAccessor->getIntegerValue($key, $data));
+        self::assertSame($expected, $this->arrayAccessor->getInteger($key, $data));
     }
 
     /**
      * @return array<mixed>
      */
-    public function getIntegerValueDataProvider(): array
+    public function getIntegerDataProvider(): array
     {
         return [
             'empty data' => [
@@ -132,20 +132,20 @@ class ArrayAccessorTest extends TestCase
     }
 
     /**
-     * @dataProvider getNonEmptyStringValueDataProvider
+     * @dataProvider getNonEmptyStringDataProvider
      *
      * @param non-empty-string $key
      * @param array<mixed>     $data
      */
-    public function testGetNonEmptyStringValue(string $key, array $data, ?string $expected): void
+    public function testGetNonEmptyString(string $key, array $data, ?string $expected): void
     {
-        self::assertSame($expected, $this->arrayAccessor->getNonEmptyStringValue($key, $data));
+        self::assertSame($expected, $this->arrayAccessor->getNonEmptyString($key, $data));
     }
 
     /**
      * @return array<mixed>
      */
-    public function getNonEmptyStringValueDataProvider(): array
+    public function getNonEmptyStringDataProvider(): array
     {
         return [
             'empty data' => [
@@ -185,20 +185,20 @@ class ArrayAccessorTest extends TestCase
     }
 
     /**
-     * @dataProvider getNonEmptyStringArrayValueDataProvider
+     * @dataProvider getNonEmptyStringArrayDataProvider
      *
      * @param array<non-empty-string> $expected
      * @param array<mixed>            $data
      */
-    public function testGetNonEmptyStringArrayValue(string $key, array $data, array $expected): void
+    public function testGetNonEmptyStringArray(string $key, array $data, array $expected): void
     {
-        self::assertSame($expected, $this->arrayAccessor->getNonEmptyStringArrayValue($key, $data));
+        self::assertSame($expected, $this->arrayAccessor->getNonEmptyStringArray($key, $data));
     }
 
     /**
      * @return array<mixed>
      */
-    public function getNonEmptyStringArrayValueDataProvider(): array
+    public function getNonEmptyStringArrayDataProvider(): array
     {
         return [
             'empty data' => [
@@ -259,20 +259,20 @@ class ArrayAccessorTest extends TestCase
     }
 
     /**
-     * @dataProvider getPositiveIntegerValueDataProvider
+     * @dataProvider getPositiveIntegerDataProvider
      *
      * @param non-empty-string $key
      * @param array<mixed>     $data
      */
-    public function testGetPositiveIntegerValue(string $key, array $data, ?int $expected): void
+    public function testGetPositiveInteger(string $key, array $data, ?int $expected): void
     {
-        self::assertSame($expected, $this->arrayAccessor->getPositiveIntegerValue($key, $data));
+        self::assertSame($expected, $this->arrayAccessor->getPositiveInteger($key, $data));
     }
 
     /**
      * @return array<mixed>
      */
-    public function getPositiveIntegerValueDataProvider(): array
+    public function getPositiveIntegerDataProvider(): array
     {
         return [
             'empty data' => [
