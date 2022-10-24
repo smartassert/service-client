@@ -10,7 +10,7 @@ class ArrayAccessor
      * @param non-empty-string $key
      * @param array<mixed>     $data
      */
-    public function getStringValue(string $key, array $data): ?string
+    public function getString(string $key, array $data): ?string
     {
         $value = $data[$key] ?? null;
 
@@ -21,7 +21,7 @@ class ArrayAccessor
      * @param non-empty-string $key
      * @param array<mixed>     $data
      */
-    public function getIntegerValue(string $key, array $data): ?int
+    public function getInteger(string $key, array $data): ?int
     {
         $value = $data[$key] ?? null;
 
@@ -34,9 +34,9 @@ class ArrayAccessor
      *
      * @return null|non-empty-string
      */
-    public function getNonEmptyStringValue(string $key, array $data): ?string
+    public function getNonEmptyString(string $key, array $data): ?string
     {
-        return $this->createNonEmptyString(trim((string) $this->getStringValue($key, $data)));
+        return $this->createNonEmptyString(trim((string) $this->getString($key, $data)));
     }
 
     /**
@@ -44,7 +44,7 @@ class ArrayAccessor
      *
      * @return non-empty-string[]
      */
-    public function getNonEmptyStringArrayValue(string $key, array $data): array
+    public function getNonEmptyStringArray(string $key, array $data): array
     {
         $values = [];
 
@@ -70,9 +70,9 @@ class ArrayAccessor
      *
      * @return null|positive-int
      */
-    public function getPositiveIntegerValue(string $key, array $data): ?int
+    public function getPositiveInteger(string $key, array $data): ?int
     {
-        $value = $this->getIntegerValue($key, $data);
+        $value = $this->getInteger($key, $data);
 
         return is_int($value) && $value > 0 ? $value : null;
     }
