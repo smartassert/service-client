@@ -36,7 +36,9 @@ interface JsonResponseInterface extends ResponseInterface
     public function getNonEmptyStringCollection(string $key): array;
 
     /**
+     * @param non-empty-string $key
+     *
      * @return null|positive-int
      */
-    public function getPositiveInteger(): ?int;
+    public function getPositiveInteger(string $key): ?int;
 }
