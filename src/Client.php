@@ -7,13 +7,12 @@ namespace SmartAssert\ServiceClient;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
-use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
-use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
-use SmartAssert\ServiceClient\Exception\NonSuccessResponseException;
 use SmartAssert\ServiceClient\Payload\Payload;
+use SmartAssert\ServiceClient\Response\JsonResponse;
+use SmartAssert\ServiceClient\Response\Response;
+use SmartAssert\ServiceClient\Response\ResponseInterface;
 
 class Client
 {
@@ -21,13 +20,11 @@ class Client
         private readonly RequestFactoryInterface $requestFactory,
         private readonly StreamFactoryInterface $streamFactory,
         private readonly HttpClientInterface $httpClient,
-        private readonly ResponseDecoder $responseDecoder,
     ) {
     }
 
     /**
      * @throws ClientExceptionInterface
-     * @throws NonSuccessResponseException
      */
     public function sendRequest(Request $request): ResponseInterface
     {
@@ -49,26 +46,14 @@ class Client
             ;
         }
 
-        $response = $this->httpClient->sendRequest($httpRequest);
-        if ($response->getStatusCode() >= 300) {
-            throw new NonSuccessResponseException($response);
-        }
-
-        return $response;
+        return new Response($this->httpClient->sendRequest($httpRequest));
     }
 
     /**
-     * @return array<mixed>
-     *
      * @throws ClientExceptionInterface
-     * @throws InvalidResponseContentException
-     * @throws InvalidResponseDataException
-     * @throws NonSuccessResponseException
      */
-    public function sendRequestForJsonEncodedData(Request $request): array
+    public function sendRequestForJsonEncodedData(Request $request): JsonResponse
     {
-        $response = $this->sendRequest($request);
-
-        return $this->responseDecoder->decodedJsonResponse($response);
+        return new JsonResponse($this->sendRequest($request)->getHttpResponse());
     }
 }

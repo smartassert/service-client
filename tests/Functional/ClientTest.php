@@ -13,17 +13,14 @@ use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Authentication\BearerAuthentication;
 use SmartAssert\ServiceClient\Client;
-use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
-use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
-use SmartAssert\ServiceClient\Exception\NonSuccessResponseException;
 use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Request;
-use SmartAssert\ServiceClient\ResponseDecoder;
+use SmartAssert\ServiceClient\Response\JsonResponse;
+use SmartAssert\ServiceClient\Response\JsonResponseInterface;
 use SmartAssert\ServiceClient\Tests\SerializablePayload;
 use webignition\HttpHistoryContainer\Container as HttpHistoryContainer;
 
@@ -48,25 +45,7 @@ class ClientTest extends TestCase
             $httpFactory,
             $httpFactory,
             new HttpClient(['handler' => $handlerStack]),
-            new ResponseDecoder(),
         );
-    }
-
-    public function testSendRequestNonSuccessfulResponse(): void
-    {
-        for ($i = 300; $i <= 599; ++$i) {
-            $responseStatusCode = $i;
-            $response = new Response($responseStatusCode);
-
-            $this->mockHandler->append($response);
-
-            try {
-                $this->client->sendRequest(new Request('GET', 'http://example.com'));
-                self::fail(NonSuccessResponseException::class . ' not thrown');
-            } catch (NonSuccessResponseException $nonSuccessResponseException) {
-                self::assertSame($responseStatusCode, $nonSuccessResponseException->getCode());
-            }
-        }
     }
 
     /**
@@ -91,42 +70,6 @@ class ClientTest extends TestCase
     }
 
     /**
-     * @dataProvider sendRequestForJsonEncodedDataFailureDataProvider
-     *
-     * @param class-string $expectedExceptionClass
-     */
-    public function testSendRequestForJsonEncodedDataFailure(
-        ResponseInterface $httpFixture,
-        string $expectedExceptionClass
-    ): void {
-        $this->mockHandler->append($httpFixture);
-
-        try {
-            $this->client->sendRequestForJsonEncodedData(new Request('GET', 'http://example.com'));
-            self::fail('Exception not thrown');
-        } catch (InvalidResponseContentException | InvalidResponseDataException $e) {
-            self::assertInstanceOf($expectedExceptionClass, $e);
-        }
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function sendRequestForJsonEncodedDataFailureDataProvider(): array
-    {
-        return [
-            'invalid response content type' => [
-                'response' => new Response(200, ['content-type' => 'text/plain']),
-                'expectedExceptionClass' => InvalidResponseContentException::class,
-            ],
-            'invalid response data' => [
-                'response' => new Response(200, ['content-type' => 'application/json'], (string) json_encode(true)),
-                'expectedExceptionClass' => InvalidResponseDataException::class,
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider sendRequestSuccessDataProvider
      */
     public function testSendRequestForJsonEncodedDataSuccess(
@@ -141,7 +84,9 @@ class ClientTest extends TestCase
             (string) json_encode(['key' => 'value'])
         ));
 
-        $this->client->sendRequest($request);
+        $response = $this->client->sendRequestForJsonEncodedData($request);
+        self::assertInstanceOf(JsonResponse::class, $response);
+        self::assertInstanceOf(JsonResponseInterface::class, $response);
 
         $sentRequest = $this->getLastRequest();
 
