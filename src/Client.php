@@ -7,12 +7,13 @@ namespace SmartAssert\ServiceClient;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
 use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
 use SmartAssert\ServiceClient\Payload\Payload;
+use SmartAssert\ServiceClient\Response\Response;
+use SmartAssert\ServiceClient\Response\ResponseInterface;
 
 class Client
 {
@@ -47,7 +48,7 @@ class Client
             ;
         }
 
-        return $this->httpClient->sendRequest($httpRequest);
+        return new Response($this->httpClient->sendRequest($httpRequest));
     }
 
     /**
@@ -61,6 +62,6 @@ class Client
     {
         $response = $this->sendRequest($request);
 
-        return $this->responseDecoder->decodedJsonResponse($response);
+        return $this->responseDecoder->decodedJsonResponse($response->getHttpResponse());
     }
 }
