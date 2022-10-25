@@ -9,8 +9,6 @@ use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
-use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
-use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Response\JsonResponse;
 use SmartAssert\ServiceClient\Response\Response;
@@ -53,8 +51,6 @@ class Client
 
     /**
      * @throws ClientExceptionInterface
-     * @throws InvalidResponseContentException
-     * @throws InvalidResponseDataException
      */
     public function sendRequestForJsonEncodedData(Request $request): JsonResponse
     {
