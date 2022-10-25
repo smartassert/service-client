@@ -12,6 +12,7 @@ use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
 use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
 use SmartAssert\ServiceClient\Payload\Payload;
+use SmartAssert\ServiceClient\Response\JsonResponse;
 use SmartAssert\ServiceClient\Response\Response;
 use SmartAssert\ServiceClient\Response\ResponseInterface;
 
@@ -21,7 +22,6 @@ class Client
         private readonly RequestFactoryInterface $requestFactory,
         private readonly StreamFactoryInterface $streamFactory,
         private readonly HttpClientInterface $httpClient,
-        private readonly ResponseDecoder $responseDecoder,
     ) {
     }
 
@@ -52,16 +52,12 @@ class Client
     }
 
     /**
-     * @return array<mixed>
-     *
      * @throws ClientExceptionInterface
      * @throws InvalidResponseContentException
      * @throws InvalidResponseDataException
      */
-    public function sendRequestForJsonEncodedData(Request $request): array
+    public function sendRequestForJsonEncodedData(Request $request): JsonResponse
     {
-        $response = $this->sendRequest($request);
-
-        return $this->responseDecoder->decodedJsonResponse($response->getHttpResponse());
+        return new JsonResponse($this->sendRequest($request)->getHttpResponse());
     }
 }
