@@ -12,7 +12,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
 use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
-use SmartAssert\ServiceClient\Exception\NonSuccessResponseException;
 use SmartAssert\ServiceClient\Payload\Payload;
 
 class Client
@@ -27,7 +26,6 @@ class Client
 
     /**
      * @throws ClientExceptionInterface
-     * @throws NonSuccessResponseException
      */
     public function sendRequest(Request $request): ResponseInterface
     {
@@ -49,12 +47,7 @@ class Client
             ;
         }
 
-        $response = $this->httpClient->sendRequest($httpRequest);
-        if ($response->getStatusCode() >= 300) {
-            throw new NonSuccessResponseException($response);
-        }
-
-        return $response;
+        return $this->httpClient->sendRequest($httpRequest);
     }
 
     /**
@@ -63,7 +56,6 @@ class Client
      * @throws ClientExceptionInterface
      * @throws InvalidResponseContentException
      * @throws InvalidResponseDataException
-     * @throws NonSuccessResponseException
      */
     public function sendRequestForJsonEncodedData(Request $request): array
     {

@@ -19,7 +19,6 @@ use SmartAssert\ServiceClient\Authentication\BearerAuthentication;
 use SmartAssert\ServiceClient\Client;
 use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
 use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
-use SmartAssert\ServiceClient\Exception\NonSuccessResponseException;
 use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Request;
@@ -50,23 +49,6 @@ class ClientTest extends TestCase
             new HttpClient(['handler' => $handlerStack]),
             new ResponseDecoder(),
         );
-    }
-
-    public function testSendRequestNonSuccessfulResponse(): void
-    {
-        for ($i = 300; $i <= 599; ++$i) {
-            $responseStatusCode = $i;
-            $response = new Response($responseStatusCode);
-
-            $this->mockHandler->append($response);
-
-            try {
-                $this->client->sendRequest(new Request('GET', 'http://example.com'));
-                self::fail(NonSuccessResponseException::class . ' not thrown');
-            } catch (NonSuccessResponseException $nonSuccessResponseException) {
-                self::assertSame($responseStatusCode, $nonSuccessResponseException->getCode());
-            }
-        }
     }
 
     /**
