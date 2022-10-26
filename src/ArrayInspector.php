@@ -17,6 +17,17 @@ class ArrayInspector
     /**
      * @param int|non-empty-string $key
      */
+    public function getArrayInspector(int|string $key): ArrayInspector
+    {
+        $value = $this->data[$key] ?? [];
+        $value = is_array($value) ? $value : [];
+
+        return new ArrayInspector($value);
+    }
+
+    /**
+     * @param int|non-empty-string $key
+     */
     public function getString(int|string $key): ?string
     {
         $value = $this->data[$key] ?? null;

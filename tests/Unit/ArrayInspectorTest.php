@@ -164,6 +164,58 @@ class ArrayInspectorTest extends TestCase
     }
 
     /**
+     * @dataProvider getArrayInspectorDataProvider
+     *
+     * @param non-empty-string $key
+     */
+    public function testGetArrayInspector(ArrayInspector $inspector, string $key, ArrayInspector $expected): void
+    {
+        self::assertEquals($expected, $inspector->getArrayInspector($key));
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getArrayInspectorDataProvider(): array
+    {
+        return [
+            'empty array' => [
+                'inspector' => new ArrayInspector([]),
+                'key' => 'key',
+                'expected' => new ArrayInspector([]),
+            ],
+            'key not present' => [
+                'inspector' => new ArrayInspector(['key' => 'value']),
+                'key' => 'missing',
+                'expected' => new ArrayInspector([]),
+            ],
+            'value is not an array' => [
+                'inspector' => new ArrayInspector(['key' => 'string']),
+                'key' => 'key',
+                'expected' => new ArrayInspector([]),
+            ],
+            'value is an empty array' => [
+                'inspector' => new ArrayInspector(['key' => []]),
+                'key' => 'key',
+                'expected' => new ArrayInspector([]),
+            ],
+            'value is a non-empty array' => [
+                'inspector' => new ArrayInspector(['key' => [
+                    'key1' => 'value1',
+                    'key2' => 'value2',
+                    'key3' => 'value3',
+                ]]),
+                'key' => 'key',
+                'expected' => new ArrayInspector([
+                    'key1' => 'value1',
+                    'key2' => 'value2',
+                    'key3' => 'value3',
+                ]),
+            ],
+        ];
+    }
+
+    /**
      * @return array<mixed>
      */
     public function getFromEmptyCollectionDataProvider(): array
