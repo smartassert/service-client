@@ -24,6 +24,27 @@ class ArrayInspector
     }
 
     /**
+     * @param callable(int|non-empty-string $key, mixed $value): mixed $action
+     * @param null|callable(mixed $item): bool $validator
+     *
+     * @return array<mixed>
+     */
+    public function each(callable $action, ?callable $validator = null): array
+    {
+        $items = [];
+
+        foreach ($this->data as $key => $value) {
+            $item = $action($key, $value);
+
+            if (null === $validator || (is_callable($validator) && true === $validator($item))) {
+                $items[] = $item;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
      * @param int|non-empty-string $key
      */
     public function getArrayInspector(int|string $key): ArrayInspector
