@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartAssert\ServiceClient\Response;
 
+use SmartAssert\ServiceClient\ArrayInspector;
 use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
 use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
 
@@ -27,6 +28,15 @@ class JsonResponse extends Response implements JsonResponseInterface
         }
 
         return $this->data;
+    }
+
+    /**
+     * @throws InvalidResponseContentException
+     * @throws InvalidResponseDataException
+     */
+    public function getArrayInspector(): ArrayInspector
+    {
+        return new ArrayInspector($this->getData());
     }
 
     /**
