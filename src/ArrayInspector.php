@@ -16,6 +16,15 @@ class ArrayInspector
 
     /**
      * @param int|non-empty-string $key
+     * @param non-empty-string     $type
+     */
+    public function has(int|string $key, string $type): bool
+    {
+        return gettype($this->data[$key] ?? null) === $type;
+    }
+
+    /**
+     * @param int|non-empty-string $key
      */
     public function getArrayInspector(int|string $key): ArrayInspector
     {
@@ -48,7 +57,7 @@ class ArrayInspector
     /**
      * @param int|non-empty-string $key
      *
-     * @return non-empty-string
+     * @return null|non-empty-string
      */
     public function getNonEmptyString(int|string $key): ?string
     {

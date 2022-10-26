@@ -216,6 +216,88 @@ class ArrayInspectorTest extends TestCase
     }
 
     /**
+     * @dataProvider hasDataProvider
+     *
+     * @param non-empty-string $key
+     * @param non-empty-string $type
+     */
+    public function testHas(ArrayInspector $inspector, string $key, string $type, bool $expected): void
+    {
+        self::assertSame($expected, $inspector->has($key, $type));
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function hasDataProvider(): array
+    {
+        return [
+            'empty' => [
+                'inspector' => new ArrayInspector([]),
+                'key' => 'key',
+                'type' => 'string',
+                'expected' => false,
+            ],
+            'key not present' => [
+                'inspector' => new ArrayInspector([
+                    'key' => 'value',
+                ]),
+                'key' => 'not-present',
+                'type' => 'string',
+                'expected' => false,
+            ],
+            'incorrect type' => [
+                'inspector' => new ArrayInspector([
+                    'key' => 'value',
+                ]),
+                'key' => 'key',
+                'type' => 'integer',
+                'expected' => false,
+            ],
+            'integer value present' => [
+                'inspector' => new ArrayInspector([
+                    'key' => 100,
+                ]),
+                'key' => 'key',
+                'type' => 'integer',
+                'expected' => true,
+            ],
+            'double (float) value present' => [
+                'inspector' => new ArrayInspector([
+                    'key' => M_PI,
+                ]),
+                'key' => 'key',
+                'type' => 'double',
+                'expected' => true,
+            ],
+            'string value present' => [
+                'inspector' => new ArrayInspector([
+                    'key' => 'value',
+                ]),
+                'key' => 'key',
+                'type' => 'string',
+                'expected' => true,
+            ],
+            'array value present' => [
+                'inspector' => new ArrayInspector([
+                    'key' => [],
+                ]),
+                'key' => 'key',
+                'type' => 'array',
+                'expected' => true,
+            ],
+            'null value present' => [
+                'inspector' => new ArrayInspector([
+                    'key' => null,
+                ]),
+                'key' => 'key',
+                'type' => 'NULL',
+                'expected' => true,
+            ],
+        ];
+    }
+
+    /**
      * @return array<mixed>
      */
     public function getFromEmptyCollectionDataProvider(): array
