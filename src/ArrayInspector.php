@@ -46,13 +46,14 @@ class ArrayInspector
 
     /**
      * @param int|non-empty-string $key
+     *
+     * @return array<mixed>
      */
-    public function getArrayInspector(int|string $key): ArrayInspector
+    public function getArray(int|string $key): Array
     {
         $value = $this->data[$key] ?? [];
-        $value = is_array($value) ? $value : [];
 
-        return new ArrayInspector($value);
+        return is_array($value) ? $value : [];
     }
 
     /**
