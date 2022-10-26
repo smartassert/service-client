@@ -47,6 +47,8 @@ class ArrayInspector
 
     /**
      * @param int|non-empty-string $key
+     *
+     * @return non-empty-string
      */
     public function getNonEmptyString(int|string $key): ?string
     {
