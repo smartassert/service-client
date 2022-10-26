@@ -12,7 +12,6 @@ use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Response\JsonResponse;
 use SmartAssert\ServiceClient\Response\Response;
-use SmartAssert\ServiceClient\Response\ResponseInterface;
 
 class Client
 {
@@ -26,7 +25,7 @@ class Client
     /**
      * @throws ClientExceptionInterface
      */
-    public function sendRequest(Request $request): ResponseInterface
+    public function sendRequest(Request $request): Response
     {
         $httpRequest = $this->requestFactory->createRequest(
             $request->method,

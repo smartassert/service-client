@@ -20,7 +20,6 @@ use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Request;
 use SmartAssert\ServiceClient\Response\JsonResponse;
-use SmartAssert\ServiceClient\Response\JsonResponseInterface;
 use SmartAssert\ServiceClient\Tests\SerializablePayload;
 use webignition\HttpHistoryContainer\Container as HttpHistoryContainer;
 
@@ -86,7 +85,6 @@ class ClientTest extends TestCase
 
         $response = $this->client->sendRequestForJsonEncodedData($request);
         self::assertInstanceOf(JsonResponse::class, $response);
-        self::assertInstanceOf(JsonResponseInterface::class, $response);
 
         $sentRequest = $this->getLastRequest();
 
