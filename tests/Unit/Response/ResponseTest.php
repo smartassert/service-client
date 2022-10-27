@@ -55,4 +55,14 @@ class ResponseTest extends TestCase
 
         self::assertSame($httpResponse, $response->getHttpResponse());
     }
+
+    public function testGetStatusCode(): void
+    {
+        for ($statusCode = 100; $statusCode <= 599; ++$statusCode) {
+            $httpResponse = new HttpResponse($statusCode);
+            $response = new Response($httpResponse);
+
+            self::assertSame($statusCode, $response->getStatusCode());
+        }
+    }
 }

@@ -22,4 +22,9 @@ class Response
     {
         return $this->httpResponse;
     }
+
+    public function getStatusCode(): int
+    {
+        return $this->getHttpResponse()->getStatusCode();
+    }
 }
