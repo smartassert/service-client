@@ -6,7 +6,7 @@ namespace SmartAssert\ServiceClient\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 
-abstract class AbstractInvalidResponseException extends \Exception
+abstract class AbstractInvalidResponseException extends \Exception implements HttpResponseExceptionInterface
 {
     public function __construct(
         public readonly string $context,
@@ -15,5 +15,10 @@ abstract class AbstractInvalidResponseException extends \Exception
         public readonly ResponseInterface $response,
     ) {
         parent::__construct(sprintf('Expected %s of "%s", got "%s"', $context, $expected, $actual));
+    }
+
+    public function getResponse(): ResponseInterface
+    {
+        return $this->response;
     }
 }
