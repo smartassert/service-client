@@ -8,11 +8,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class InvalidResponseContentException extends AbstractInvalidResponseContentException
 {
-    public function __construct(
-        string $expected,
-        string $actual,
-        ResponseInterface $response
-    ) {
-        parent::__construct('content-type header', $expected, $actual, $response);
+    public function __construct(ResponseInterface $response, string $expected, string $actual)
+    {
+        parent::__construct($response, 'content-type header', $expected, $actual);
     }
 }

@@ -33,9 +33,9 @@ class JsonResponseTest extends TestCase
                     new HttpResponse()
                 ),
                 'expected' => new InvalidResponseContentException(
+                    new HttpResponse(),
                     'application/json',
-                    '',
-                    new HttpResponse()
+                    ''
                 ),
             ],
             'http response has incorrect content type' => [
@@ -43,9 +43,9 @@ class JsonResponseTest extends TestCase
                     new HttpResponse(200, ['content-type' => 'text/plain'])
                 ),
                 'expected' => new InvalidResponseContentException(
+                    new HttpResponse(),
                     'application/json',
-                    'text/plain',
-                    new HttpResponse()
+                    'text/plain'
                 ),
             ],
             'http response body is not json' => [
