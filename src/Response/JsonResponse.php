@@ -43,7 +43,7 @@ class JsonResponse extends Response
         $actualContentType = $httpResponse->getHeaderLine('content-type');
 
         if ($expectedContentType !== $actualContentType) {
-            throw new InvalidResponseContentException($expectedContentType, $actualContentType, $httpResponse);
+            throw new InvalidResponseContentException($httpResponse, $expectedContentType, $actualContentType);
         }
 
         $data = json_decode($httpResponse->getBody()->getContents(), true);

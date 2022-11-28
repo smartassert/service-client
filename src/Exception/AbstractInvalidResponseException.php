@@ -9,12 +9,10 @@ use Psr\Http\Message\ResponseInterface;
 abstract class AbstractInvalidResponseException extends \Exception implements HttpResponseExceptionInterface
 {
     public function __construct(
-        public readonly string $context,
-        public readonly string $expected,
-        public readonly string $actual,
         public readonly ResponseInterface $response,
+        string $message,
     ) {
-        parent::__construct(sprintf('Expected %s of "%s", got "%s"', $context, $expected, $actual));
+        parent::__construct($message, $this->response->getStatusCode());
     }
 
     public function getResponse(): ResponseInterface
