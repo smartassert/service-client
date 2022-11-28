@@ -6,7 +6,7 @@ namespace SmartAssert\ServiceClient\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 
-abstract class AbstractInvalidResponseException extends \Exception implements HttpResponseExceptionInterface
+abstract class AbstractInvalidResponseContentException extends \Exception implements HttpResponseExceptionInterface
 {
     public function __construct(
         public readonly string $context,
