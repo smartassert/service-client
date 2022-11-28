@@ -6,19 +6,14 @@ namespace SmartAssert\ServiceClient\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 
-class NonSuccessResponseException extends \Exception implements HttpResponseExceptionInterface
+class NonSuccessResponseException extends AbstractInvalidResponseException implements HttpResponseExceptionInterface
 {
     public function __construct(
-        public readonly ResponseInterface $response,
+        ResponseInterface $response,
     ) {
         parent::__construct(
-            sprintf('%s: %s', $this->response->getStatusCode(), $this->response->getReasonPhrase()),
-            $this->response->getStatusCode()
+            $response,
+            sprintf('%s: %s', $response->getStatusCode(), $response->getReasonPhrase()),
         );
-    }
-
-    public function getResponse(): ResponseInterface
-    {
-        return $this->response;
     }
 }
