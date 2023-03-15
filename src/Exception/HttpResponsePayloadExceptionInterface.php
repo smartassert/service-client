@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SmartAssert\ServiceClient\Exception;
 
-interface HttpResponsePayloadExceptionInterface
+interface HttpResponsePayloadExceptionInterface extends HttpResponseExceptionInterface
 {
     /**
      * @return array<mixed>
