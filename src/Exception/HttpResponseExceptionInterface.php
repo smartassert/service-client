@@ -6,7 +6,7 @@ namespace SmartAssert\ServiceClient\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 
-interface HttpResponseExceptionInterface
+interface HttpResponseExceptionInterface extends \Throwable
 {
     public function getResponse(): ResponseInterface;
 }
