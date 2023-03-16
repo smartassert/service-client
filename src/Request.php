@@ -12,6 +12,9 @@ class Request
     private ?Authentication $authentication = null;
     private ?Payload $payload = null;
 
+    /**
+     * @param non-empty-string $method
+     */
     public function __construct(
         public readonly string $method,
         public readonly string $url,
