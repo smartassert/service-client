@@ -28,7 +28,6 @@ class InvalidModelDataException extends InvalidResponseException implements Http
     /**
      * @param class-string $class
      *
-     * @throws InvalidResponseContentException
      * @throws InvalidResponseDataException
      */
     public static function fromJsonResponse(string $class, JsonResponse $response): InvalidModelDataException

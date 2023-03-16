@@ -6,7 +6,6 @@ namespace SmartAssert\ServiceClient\Tests\Unit\Response;
 
 use GuzzleHttp\Psr7\Response as HttpResponse;
 use PHPUnit\Framework\TestCase;
-use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
 use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
 use SmartAssert\ServiceClient\Response\JsonResponse;
 
@@ -28,26 +27,6 @@ class JsonResponseTest extends TestCase
     public function getDataThrowsExceptionDataProvider(): array
     {
         return [
-            'http response has no content type' => [
-                'response' => new JsonResponse(
-                    new HttpResponse()
-                ),
-                'expected' => new InvalidResponseContentException(
-                    new HttpResponse(),
-                    'application/json',
-                    ''
-                ),
-            ],
-            'http response has incorrect content type' => [
-                'response' => new JsonResponse(
-                    new HttpResponse(200, ['content-type' => 'text/plain'])
-                ),
-                'expected' => new InvalidResponseContentException(
-                    new HttpResponse(),
-                    'application/json',
-                    'text/plain'
-                ),
-            ],
             'http response body is not json' => [
                 'response' => new JsonResponse(
                     new HttpResponse(200, ['content-type' => 'application/json'], '{!')
