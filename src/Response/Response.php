@@ -6,7 +6,7 @@ namespace SmartAssert\ServiceClient\Response;
 
 use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
 
-class Response
+class Response implements ResponseInterface
 {
     public function __construct(
         private readonly HttpResponseInterface $httpResponse,
