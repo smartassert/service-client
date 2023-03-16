@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SmartAssert\ServiceClient\Exception;
 
-use Psr\Http\Message\ResponseInterface;
-use SmartAssert\ServiceClient\Response\Response;
+use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
+use SmartAssert\ServiceClient\Response\ResponseInterface;
 
 class InvalidResponseTypeException extends AbstractInvalidResponseContentException
 {
@@ -13,7 +13,7 @@ class InvalidResponseTypeException extends AbstractInvalidResponseContentExcepti
      * @param class-string $expected
      * @param class-string $actual
      */
-    public function __construct(ResponseInterface $response, string $expected, string $actual)
+    public function __construct(HttpResponseInterface $response, string $expected, string $actual)
     {
         parent::__construct($response, 'response type', $expected, $actual);
     }
@@ -21,7 +21,7 @@ class InvalidResponseTypeException extends AbstractInvalidResponseContentExcepti
     /**
      * @param class-string $expected
      */
-    public static function create(Response $response, string $expected): InvalidResponseTypeException
+    public static function create(ResponseInterface $response, string $expected): InvalidResponseTypeException
     {
         return new InvalidResponseTypeException($response->getHttpResponse(), $expected, $response::class);
     }
