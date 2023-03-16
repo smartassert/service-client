@@ -10,9 +10,10 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Response as HttpResponse;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Authentication\BearerAuthentication;
 use SmartAssert\ServiceClient\Client;
@@ -20,6 +21,8 @@ use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Request;
 use SmartAssert\ServiceClient\Response\JsonResponse;
+use SmartAssert\ServiceClient\Response\Response;
+use SmartAssert\ServiceClient\Response\ResponseInterface;
 use SmartAssert\ServiceClient\ResponseFactory\ResponseFactory;
 use SmartAssert\ServiceClient\Tests\SerializablePayload;
 use webignition\HttpHistoryContainer\Container as HttpHistoryContainer;
@@ -50,60 +53,30 @@ class ClientTest extends TestCase
     }
 
     /**
-     * @dataProvider sendRequestSuccessDataProvider
+     * @dataProvider sendRequestCreatesCorrectHttpRequestDataProvider
      */
-    public function testSendRequestSuccess(Request $request, RequestInterface $expectedSentRequest): void
+    public function testSendRequestCreatesCorrectHttpRequest(Request $request, RequestInterface $expected): void
     {
-        $this->mockHandler->append(new Response());
+        $this->mockHandler->append(new HttpResponse());
 
         $this->client->sendRequest($request);
 
         $lastRequest = $this->getLastRequest();
 
-        self::assertSame($expectedSentRequest->getMethod(), $lastRequest->getMethod());
-        self::assertSame((string) $expectedSentRequest->getUri(), (string) $lastRequest->getUri());
+        self::assertSame($expected->getMethod(), $lastRequest->getMethod());
+        self::assertSame((string) $expected->getUri(), (string) $lastRequest->getUri());
 
         $sentHeaders = $lastRequest->getHeaders();
         unset($sentHeaders['User-Agent']);
 
-        self::assertEquals($expectedSentRequest->getHeaders(), $sentHeaders);
-        self::assertSame($expectedSentRequest->getBody()->getContents(), $lastRequest->getBody()->getContents());
-    }
-
-    /**
-     * @dataProvider sendRequestSuccessDataProvider
-     */
-    public function testSendRequestForJsonEncodedDataSuccess(
-        Request $request,
-        RequestInterface $expectedSentRequest
-    ): void {
-        $this->mockHandler->append(new Response(
-            200,
-            [
-                'content-type' => 'application/json',
-            ],
-            (string) json_encode(['key' => 'value'])
-        ));
-
-        $response = $this->client->sendRequestForJsonEncodedData($request);
-        self::assertInstanceOf(JsonResponse::class, $response);
-
-        $sentRequest = $this->getLastRequest();
-
-        self::assertSame($expectedSentRequest->getMethod(), $sentRequest->getMethod());
-        self::assertSame((string) $expectedSentRequest->getUri(), (string) $sentRequest->getUri());
-
-        $sentHeaders = $sentRequest->getHeaders();
-        unset($sentHeaders['User-Agent']);
-
-        self::assertEquals($expectedSentRequest->getHeaders(), $sentHeaders);
-        self::assertSame($expectedSentRequest->getBody()->getContents(), $sentRequest->getBody()->getContents());
+        self::assertEquals($expected->getHeaders(), $sentHeaders);
+        self::assertSame($expected->getBody()->getContents(), $lastRequest->getBody()->getContents());
     }
 
     /**
      * @return array<mixed>
      */
-    public function sendRequestSuccessDataProvider(): array
+    public function sendRequestCreatesCorrectHttpRequestDataProvider(): array
     {
         $textPlainPayload = 'text plain payload';
         $jsonPayloadData = ['key1' => 'value1', 'key2' => 'value2'];
@@ -112,16 +85,16 @@ class ClientTest extends TestCase
         return [
             'GET with no authentication, no payload' => [
                 'request' => new Request('GET', 'http://example.com/get'),
-                'expectedSentRequest' => new GuzzleRequest('GET', 'http://example.com/get'),
+                'expected' => new GuzzleRequest('GET', 'http://example.com/get'),
             ],
             'POST with no authentication, no payload' => [
                 'request' => new Request('POST', 'http://example.com/post'),
-                'expectedSentRequest' => new GuzzleRequest('POST', 'http://example.com/post'),
+                'expected' => new GuzzleRequest('POST', 'http://example.com/post'),
             ],
             'POST with authentication, no payload' => [
                 'request' => (new Request('POST', 'http://example.com/post'))
                     ->withAuthentication(new Authentication('authentication value')),
-                'expectedSentRequest' => new GuzzleRequest(
+                'expected' => new GuzzleRequest(
                     'POST',
                     'http://example.com/post',
                     [
@@ -132,7 +105,7 @@ class ClientTest extends TestCase
             'POST with bearer authentication, no payload' => [
                 'request' => (new Request('POST', 'http://example.com/post'))
                     ->withAuthentication(new BearerAuthentication('authentication value')),
-                'expectedSentRequest' => new GuzzleRequest(
+                'expected' => new GuzzleRequest(
                     'POST',
                     'http://example.com/post',
                     [
@@ -143,7 +116,7 @@ class ClientTest extends TestCase
             'POST with no authentication, generic payload' => [
                 'request' => (new Request('POST', 'http://example.com/post'))
                     ->withPayload(new Payload('text/plain', $textPlainPayload)),
-                'expectedSentRequest' => new GuzzleRequest(
+                'expected' => new GuzzleRequest(
                     'POST',
                     'http://example.com/post',
                     [
@@ -156,7 +129,7 @@ class ClientTest extends TestCase
             'POST with no authentication, json payload with array' => [
                 'request' => (new Request('POST', 'http://example.com/post'))
                     ->withPayload(new JsonPayload($jsonPayloadData)),
-                'expectedSentRequest' => new GuzzleRequest(
+                'expected' => new GuzzleRequest(
                     'POST',
                     'http://example.com/post',
                     [
@@ -169,7 +142,7 @@ class ClientTest extends TestCase
             'POST with no authentication, json payload with JsonSerializable' => [
                 'request' => (new Request('POST', 'http://example.com/post'))
                     ->withPayload(new JsonPayload(new SerializablePayload($jsonPayloadData))),
-                'expectedSentRequest' => new GuzzleRequest(
+                'expected' => new GuzzleRequest(
                     'POST',
                     'http://example.com/post',
                     [
@@ -178,6 +151,55 @@ class ClientTest extends TestCase
                     ],
                     $jsonPayload
                 ),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider sendRequestCreatesCorrectResponseDataProvider
+     */
+    public function testSendRequestCreatesCorrectResponse(
+        HttpResponseInterface $httpResponse,
+        ResponseInterface $expected,
+    ): void {
+        $this->mockHandler->append($httpResponse);
+
+        self::assertEquals(
+            $expected,
+            $this->client->sendRequest(new Request('GET', 'http://example.com/' . md5((string) rand())))
+        );
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function sendRequestCreatesCorrectResponseDataProvider(): array
+    {
+        $responseTextPlainNoBody = new HttpResponse(200, ['content-type' => 'text/plain']);
+        $responseApplicationJsonNoBody = new HttpResponse(200, ['content-type' => 'application/json']);
+        $responseTextPlain = new HttpResponse(200, ['content-type' => 'text/plain'], 'text plain content');
+        $responseApplicationJson = new HttpResponse(
+            200,
+            ['content-type' => 'application/json'],
+            (string) json_encode(['key' => 'value'])
+        );
+
+        return [
+            'text/plain, no body' => [
+                'httpResponse' => $responseTextPlainNoBody,
+                'expected' => new Response($responseTextPlainNoBody),
+            ],
+            'application/json, no body' => [
+                'httpResponse' => $responseApplicationJsonNoBody,
+                'expected' => new JsonResponse($responseApplicationJsonNoBody),
+            ],
+            'text/plain' => [
+                'httpResponse' => $responseTextPlain,
+                'expected' => new Response($responseTextPlain),
+            ],
+            'application/json' => [
+                'httpResponse' => $responseApplicationJson,
+                'expected' => new JsonResponse($responseApplicationJson),
             ],
         ];
     }

@@ -10,7 +10,6 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Payload\Payload;
-use SmartAssert\ServiceClient\Response\JsonResponse;
 use SmartAssert\ServiceClient\Response\ResponseInterface;
 use SmartAssert\ServiceClient\ResponseFactory\ResponseFactory;
 
@@ -50,13 +49,5 @@ class Client
         return $this->responseFactory->create(
             $this->httpClient->sendRequest($httpRequest)
         );
-    }
-
-    /**
-     * @throws ClientExceptionInterface
-     */
-    public function sendRequestForJsonEncodedData(Request $request): JsonResponse
-    {
-        return new JsonResponse($this->sendRequest($request)->getHttpResponse());
     }
 }
