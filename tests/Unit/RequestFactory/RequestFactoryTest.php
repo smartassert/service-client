@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SmartAssert\ServiceClient\Tests\Unit;
+namespace SmartAssert\ServiceClient\Tests\Unit\RequestFactory;
 
 use PHPUnit\Framework\TestCase;
 use SmartAssert\ServiceClient\Request;
-use SmartAssert\ServiceClient\RequestFactory;
+use SmartAssert\ServiceClient\RequestFactory\RequestFactory;
 
 class RequestFactoryTest extends TestCase
 {

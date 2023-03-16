@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SmartAssert\ServiceClient;
+namespace SmartAssert\ServiceClient\RequestFactory;
+
+use SmartAssert\ServiceClient\Request;
 
 class RequestFactory
 {
