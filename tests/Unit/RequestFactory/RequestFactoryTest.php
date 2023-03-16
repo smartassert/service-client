@@ -72,4 +72,13 @@ class RequestFactoryTest extends TestCase
             ],
         ];
     }
+
+    public function testGetRequestMiddlewareCollection(): void
+    {
+        $requestMiddlewareCollection = new RequestMiddlewareCollection();
+
+        $requestFactory = new RequestFactory($requestMiddlewareCollection);
+
+        self::assertSame($requestMiddlewareCollection, $requestFactory->getRequestMiddlewareCollection());
+    }
 }

@@ -17,6 +17,11 @@ class RequestFactory
             : new RequestMiddlewareCollection();
     }
 
+    public function getRequestMiddlewareCollection(): RequestMiddlewareCollection
+    {
+        return $this->requestMiddlewareCollection;
+    }
+
     /**
      * @param non-empty-string $method
      */
