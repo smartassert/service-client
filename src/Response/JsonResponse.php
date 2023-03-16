@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SmartAssert\ServiceClient\Response;
 
-use SmartAssert\ServiceClient\Exception\InvalidResponseContentException;
 use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
 
 class JsonResponse extends Response
@@ -17,7 +16,6 @@ class JsonResponse extends Response
     /**
      * @return array<mixed>
      *
-     * @throws InvalidResponseContentException
      * @throws InvalidResponseDataException
      */
     public function getData(): array
@@ -32,19 +30,11 @@ class JsonResponse extends Response
     /**
      * @return array<mixed>
      *
-     * @throws InvalidResponseContentException
      * @throws InvalidResponseDataException
      */
     private function getResponseDataAsArray(): array
     {
         $httpResponse = $this->getHttpResponse();
-
-        $expectedContentType = 'application/json';
-        $actualContentType = $httpResponse->getHeaderLine('content-type');
-
-        if ($expectedContentType !== $actualContentType) {
-            throw new InvalidResponseContentException($httpResponse, $expectedContentType, $actualContentType);
-        }
 
         $data = json_decode($httpResponse->getBody()->getContents(), true);
         if (!is_array($data)) {
