@@ -20,6 +20,7 @@ use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Request;
 use SmartAssert\ServiceClient\Response\JsonResponse;
+use SmartAssert\ServiceClient\ResponseFactory\ResponseFactory;
 use SmartAssert\ServiceClient\Tests\SerializablePayload;
 use webignition\HttpHistoryContainer\Container as HttpHistoryContainer;
 
@@ -44,6 +45,7 @@ class ClientTest extends TestCase
             $httpFactory,
             $httpFactory,
             new HttpClient(['handler' => $handlerStack]),
+            ResponseFactory::createFactory(),
         );
     }
 

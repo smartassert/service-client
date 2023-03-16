@@ -11,7 +11,8 @@ use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Response\JsonResponse;
-use SmartAssert\ServiceClient\Response\Response;
+use SmartAssert\ServiceClient\Response\ResponseInterface;
+use SmartAssert\ServiceClient\ResponseFactory\ResponseFactory;
 
 class Client
 {
@@ -19,13 +20,14 @@ class Client
         private readonly RequestFactoryInterface $requestFactory,
         private readonly StreamFactoryInterface $streamFactory,
         private readonly HttpClientInterface $httpClient,
+        private readonly ResponseFactory $responseFactory,
     ) {
     }
 
     /**
      * @throws ClientExceptionInterface
      */
-    public function sendRequest(Request $request): Response
+    public function sendRequest(Request $request): ResponseInterface
     {
         $httpRequest = $this->requestFactory->createRequest(
             $request->method,
@@ -45,7 +47,9 @@ class Client
             ;
         }
 
-        return new Response($this->httpClient->sendRequest($httpRequest));
+        return $this->responseFactory->create(
+            $this->httpClient->sendRequest($httpRequest)
+        );
     }
 
     /**
