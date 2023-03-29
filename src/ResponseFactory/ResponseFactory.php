@@ -27,6 +27,8 @@ class ResponseFactory
 
     public function create(HttpResponseInterface $httpResponse): ResponseInterface
     {
+        $httpResponse->getBody()->rewind();
+
         $contentType = $httpResponse->getHeaderLine('content-type');
 
         foreach ($this->responseHandlers as $responseHandler) {
