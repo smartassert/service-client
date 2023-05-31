@@ -17,6 +17,7 @@ use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Authentication\BearerAuthentication;
 use SmartAssert\ServiceClient\Client;
+use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
 use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Request;
@@ -49,6 +50,7 @@ class ClientTest extends TestCase
             $httpFactory,
             new HttpClient(['handler' => $handlerStack]),
             ResponseFactory::createFactory(),
+            new CurlExceptionFactory(),
         );
     }
 

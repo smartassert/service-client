@@ -6,9 +6,13 @@ namespace SmartAssert\ServiceClient;
 
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
+use Psr\Http\Client\NetworkExceptionInterface;
+use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
+use SmartAssert\ServiceClient\Exception\CurlExceptionInterface;
+use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Response\ResponseInterface;
 use SmartAssert\ServiceClient\ResponseFactory\ResponseFactory;
@@ -20,11 +24,15 @@ class Client
         private readonly StreamFactoryInterface $streamFactory,
         private readonly HttpClientInterface $httpClient,
         private readonly ResponseFactory $responseFactory,
+        private readonly CurlExceptionFactory $curlExceptionFactory,
     ) {
     }
 
     /**
      * @throws ClientExceptionInterface
+     * @throws RequestExceptionInterface
+     * @throws NetworkExceptionInterface
+     * @throws CurlExceptionInterface
      */
     public function sendRequest(Request $request): ResponseInterface
     {
@@ -46,8 +54,18 @@ class Client
             ;
         }
 
-        return $this->responseFactory->create(
-            $this->httpClient->sendRequest($httpRequest)
-        );
+        try {
+            return $this->responseFactory->create(
+                $this->httpClient->sendRequest($httpRequest)
+            );
+        } catch (NetworkExceptionInterface $networkException) {
+            $curlException = $this->curlExceptionFactory->createFromNetworkException($networkException);
+
+            if ($curlException instanceof CurlExceptionInterface) {
+                throw $curlException;
+            }
+
+            throw $networkException;
+        }
     }
 }
