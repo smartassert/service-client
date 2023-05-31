@@ -19,4 +19,9 @@ abstract class AbstractInvalidResponseException extends \Exception implements Ht
     {
         return $this->response;
     }
+
+    public function getStatusCode(): int
+    {
+        return $this->response->getStatusCode();
+    }
 }
