@@ -24,4 +24,9 @@ abstract class AbstractInvalidResponseException extends \Exception implements Ht
     {
         return $this->response->getStatusCode();
     }
+
+    public function getReasonPhrase(): string
+    {
+        return $this->response->getReasonPhrase();
+    }
 }
