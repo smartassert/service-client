@@ -42,7 +42,7 @@
         "psr/http-client": "^1.0",
         "psr/http-message": "^1.0",
         "psr/http-factory": "^1.0",
-        "smartassert/security-token-extractor": ">=0.2,<1"
+        "smartassert/security-token-extractor": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
