@@ -18,4 +18,5 @@ return $config->setRules([
     'types_spaces' => [
         'space_multiple_catch' => 'single',
     ],
+    'single_line_empty_body' => false,
 ])->setFinder($finder);
