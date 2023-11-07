@@ -17,6 +17,7 @@ use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Authentication\BearerAuthentication;
 use SmartAssert\ServiceClient\Client;
+use SmartAssert\ServiceClient\Exception\UnauthorizedException;
 use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
 use SmartAssert\ServiceClient\Payload\JsonPayload;
 use SmartAssert\ServiceClient\Payload\Payload;
@@ -204,6 +205,15 @@ class ClientTest extends TestCase
                 'expected' => new JsonResponse($responseApplicationJson),
             ],
         ];
+    }
+
+    public function testSendRequestThrowsUnauthorizedException(): void
+    {
+        $this->mockHandler->append(new HttpResponse(401));
+
+        self::expectException(UnauthorizedException::class);
+
+        $this->client->sendRequest(new Request('GET', 'http://example.com/' . md5((string) rand())));
     }
 
     private function getLastRequest(): RequestInterface

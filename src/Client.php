@@ -12,19 +12,20 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Exception\CurlExceptionInterface;
+use SmartAssert\ServiceClient\Exception\UnauthorizedException;
 use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
 use SmartAssert\ServiceClient\Payload\Payload;
 use SmartAssert\ServiceClient\Response\ResponseInterface;
 use SmartAssert\ServiceClient\ResponseFactory\ResponseFactory;
 
-class Client
+readonly class Client
 {
     public function __construct(
-        private readonly RequestFactoryInterface $requestFactory,
-        private readonly StreamFactoryInterface $streamFactory,
-        private readonly HttpClientInterface $httpClient,
-        private readonly ResponseFactory $responseFactory,
-        private readonly CurlExceptionFactory $curlExceptionFactory,
+        private RequestFactoryInterface $requestFactory,
+        private StreamFactoryInterface $streamFactory,
+        private HttpClientInterface $httpClient,
+        private ResponseFactory $responseFactory,
+        private CurlExceptionFactory $curlExceptionFactory,
     ) {
     }
 
@@ -33,6 +34,7 @@ class Client
      * @throws RequestExceptionInterface
      * @throws NetworkExceptionInterface
      * @throws CurlExceptionInterface
+     * @throws UnauthorizedException
      */
     public function sendRequest(Request $request): ResponseInterface
     {
@@ -55,9 +57,15 @@ class Client
         }
 
         try {
-            return $this->responseFactory->create(
+            $response = $this->responseFactory->create(
                 $this->httpClient->sendRequest($httpRequest)
             );
+
+            if (401 === $response->getStatusCode()) {
+                throw new UnauthorizedException();
+            }
+
+            return $response;
         } catch (NetworkExceptionInterface $networkException) {
             $curlException = $this->curlExceptionFactory->createFromNetworkException($networkException);
 
