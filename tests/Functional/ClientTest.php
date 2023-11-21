@@ -17,6 +17,7 @@ use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Authentication\BearerAuthentication;
 use SmartAssert\ServiceClient\Client;
+use SmartAssert\ServiceClient\Exception\InvalidResponseTypeException;
 use SmartAssert\ServiceClient\Exception\UnauthorizedException;
 use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
 use SmartAssert\ServiceClient\Payload\JsonPayload;
@@ -214,6 +215,15 @@ class ClientTest extends TestCase
         self::expectException(UnauthorizedException::class);
 
         $this->client->sendRequest(new Request('GET', 'http://example.com/' . md5((string) rand())));
+    }
+
+    public function testSendRequestForJsonThrowsInvalidResponseTypeException(): void
+    {
+        $this->mockHandler->append(new HttpResponse(200, ['content-type' => 'text/plain']));
+
+        self::expectException(InvalidResponseTypeException::class);
+
+        $this->client->sendRequestForJson(new Request('GET', 'http://example.com/' . md5((string) rand())));
     }
 
     private function getLastRequest(): RequestInterface
