@@ -9,19 +9,19 @@ use Psr\Http\Message\ResponseInterface;
 abstract class AbstractInvalidResponseException extends \Exception implements HttpResponseExceptionInterface
 {
     public function __construct(
-        public readonly ResponseInterface $response,
+        private readonly ResponseInterface $httpResponse,
         string $message,
     ) {
-        parent::__construct($message, $this->response->getStatusCode());
+        parent::__construct($message, $this->httpResponse->getStatusCode());
     }
 
     public function getHttpResponse(): ResponseInterface
     {
-        return $this->response;
+        return $this->httpResponse;
     }
 
     public function getStatusCode(): int
     {
-        return $this->response->getStatusCode();
+        return $this->httpResponse->getStatusCode();
     }
 }
