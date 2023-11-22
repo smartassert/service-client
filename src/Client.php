@@ -12,6 +12,7 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Exception\CurlExceptionInterface;
+use SmartAssert\ServiceClient\Exception\NonSuccessResponseException;
 use SmartAssert\ServiceClient\Exception\UnauthorizedException;
 use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
 use SmartAssert\ServiceClient\Payload\Payload;
@@ -35,6 +36,7 @@ readonly class Client
      * @throws NetworkExceptionInterface
      * @throws CurlExceptionInterface
      * @throws UnauthorizedException
+     * @throws NonSuccessResponseException
      */
     public function sendRequest(Request $request): ResponseInterface
     {
@@ -63,6 +65,10 @@ readonly class Client
 
             if (401 === $response->getStatusCode()) {
                 throw new UnauthorizedException();
+            }
+
+            if (!$response->isSuccessful()) {
+                throw new NonSuccessResponseException($response);
             }
 
             return $response;
