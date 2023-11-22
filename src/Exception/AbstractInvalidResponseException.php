@@ -15,7 +15,7 @@ abstract class AbstractInvalidResponseException extends \Exception implements Ht
         parent::__construct($message, $this->response->getStatusCode());
     }
 
-    public function getResponse(): ResponseInterface
+    public function getHttpResponse(): ResponseInterface
     {
         return $this->response;
     }

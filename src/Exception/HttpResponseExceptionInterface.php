@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 
 interface HttpResponseExceptionInterface extends \Throwable
 {
-    public function getResponse(): ResponseInterface;
+    public function getHttpResponse(): ResponseInterface;
 
     public function getStatusCode(): int;
 }
