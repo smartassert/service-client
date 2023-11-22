@@ -11,6 +11,4 @@ interface HttpResponseExceptionInterface extends \Throwable
     public function getResponse(): ResponseInterface;
 
     public function getStatusCode(): int;
-
-    public function getReasonPhrase(): string;
 }
