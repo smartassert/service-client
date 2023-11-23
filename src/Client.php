@@ -12,10 +12,12 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Exception\CurlExceptionInterface;
+use SmartAssert\ServiceClient\Exception\InvalidResponseTypeException;
 use SmartAssert\ServiceClient\Exception\NonSuccessResponseException;
 use SmartAssert\ServiceClient\Exception\UnauthorizedException;
 use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
 use SmartAssert\ServiceClient\Payload\Payload;
+use SmartAssert\ServiceClient\Response\JsonResponse;
 use SmartAssert\ServiceClient\Response\ResponseInterface;
 use SmartAssert\ServiceClient\ResponseFactory\ResponseFactory;
 
@@ -81,5 +83,25 @@ readonly class Client
 
             throw $networkException;
         }
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     * @throws CurlExceptionInterface
+     * @throws InvalidResponseTypeException
+     * @throws NetworkExceptionInterface
+     * @throws RequestExceptionInterface
+     * @throws UnauthorizedException
+     * @throws NonSuccessResponseException
+     */
+    public function sendRequestForJson(Request $request): JsonResponse
+    {
+        $response = $this->sendRequest($request);
+
+        if (!$response instanceof JsonResponse) {
+            throw InvalidResponseTypeException::create($response, JsonResponse::class);
+        }
+
+        return $response;
     }
 }
