@@ -12,7 +12,7 @@ class CurlException extends \Exception implements CurlExceptionInterface
         private readonly RequestInterface $request,
         private readonly int $curlCode = 0,
         private readonly string $curlMessage = '',
-        \Throwable $previous = null
+        ?\Throwable $previous = null
     ) {
         parent::__construct($curlMessage, $curlCode, $previous);
     }
