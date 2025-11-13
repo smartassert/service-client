@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SmartAssert\ServiceClient\Tests\Unit\ExceptionFactory;
 
 use GuzzleHttp\Exception\ConnectException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
@@ -14,9 +15,7 @@ use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
 
 class CurlExceptionFactoryTest extends TestCase
 {
-    /**
-     * @dataProvider createFromNetworkExceptionDataProvider
-     */
+    #[DataProvider('createFromNetworkExceptionDataProvider')]
     public function testCreateFromNetworkException(
         NetworkExceptionInterface $networkException,
         ?CurlExceptionInterface $expected

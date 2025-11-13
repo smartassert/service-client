@@ -10,6 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response as HttpResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
@@ -57,9 +58,7 @@ class ClientTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider sendRequestCreatesCorrectHttpRequestDataProvider
-     */
+    #[DataProvider('sendRequestCreatesCorrectHttpRequestDataProvider')]
     public function testSendRequestCreatesCorrectHttpRequest(Request $request, RequestInterface $expected): void
     {
         $this->mockHandler->append(new HttpResponse());
@@ -160,9 +159,7 @@ class ClientTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider sendRequestCreatesCorrectResponseDataProvider
-     */
+    #[DataProvider('sendRequestCreatesCorrectResponseDataProvider')]
     public function testSendRequestCreatesCorrectResponse(
         HttpResponseInterface $httpResponse,
         ResponseInterface $expected,

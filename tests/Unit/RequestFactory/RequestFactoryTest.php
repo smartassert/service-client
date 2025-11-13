@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartAssert\ServiceClient\Tests\Unit\RequestFactory;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SmartAssert\ServiceClient\Authentication\Authentication;
 use SmartAssert\ServiceClient\Authentication\BearerAuthentication;
@@ -15,10 +16,9 @@ use SmartAssert\ServiceClient\RequestFactory\RequestMiddlewareCollection;
 class RequestFactoryTest extends TestCase
 {
     /**
-     * @dataProvider createDataProvider
-     *
      * @param non-empty-string $method
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate(
         RequestFactory $requestFactory,
         string $method,
