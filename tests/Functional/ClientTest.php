@@ -7,7 +7,6 @@ namespace SmartAssert\ServiceClient\Tests\Functional;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response as HttpResponse;
@@ -30,6 +29,7 @@ use SmartAssert\ServiceClient\Response\ResponseInterface;
 use SmartAssert\ServiceClient\ResponseFactory\ResponseFactory;
 use SmartAssert\ServiceClient\Tests\SerializablePayload;
 use webignition\HttpHistoryContainer\Container as HttpHistoryContainer;
+use webignition\HttpHistoryContainer\MiddlewareFactory;
 
 class ClientTest extends TestCase
 {
@@ -45,7 +45,7 @@ class ClientTest extends TestCase
         $handlerStack = HandlerStack::create($this->mockHandler);
 
         $this->httpHistoryContainer = new HttpHistoryContainer();
-        $handlerStack->push(Middleware::history($this->httpHistoryContainer));
+        $handlerStack->push(MiddlewareFactory::create($this->httpHistoryContainer));
 
         $httpFactory = new HttpFactory();
         $this->client = new Client(
