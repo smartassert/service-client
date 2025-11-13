@@ -52,7 +52,7 @@
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-mockery": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^12",
         "squizlabs/php_codesniffer": "^4.0",
         "symfony/uid": "^6.1",
         "webignition/http-history-container": "^4.0"

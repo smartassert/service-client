@@ -10,6 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response as HttpResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface as HttpResponseInterface;
@@ -57,9 +58,7 @@ class ClientTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider sendRequestCreatesCorrectHttpRequestDataProvider
-     */
+    #[DataProvider('sendRequestCreatesCorrectHttpRequestDataProvider')]
     public function testSendRequestCreatesCorrectHttpRequest(Request $request, RequestInterface $expected): void
     {
         $this->mockHandler->append(new HttpResponse());
@@ -81,7 +80,7 @@ class ClientTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function sendRequestCreatesCorrectHttpRequestDataProvider(): array
+    public static function sendRequestCreatesCorrectHttpRequestDataProvider(): array
     {
         $textPlainPayload = 'text plain payload';
         $jsonPayloadData = ['key1' => 'value1', 'key2' => 'value2'];
@@ -160,9 +159,7 @@ class ClientTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider sendRequestCreatesCorrectResponseDataProvider
-     */
+    #[DataProvider('sendRequestCreatesCorrectResponseDataProvider')]
     public function testSendRequestCreatesCorrectResponse(
         HttpResponseInterface $httpResponse,
         ResponseInterface $expected,
@@ -178,7 +175,7 @@ class ClientTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function sendRequestCreatesCorrectResponseDataProvider(): array
+    public static function sendRequestCreatesCorrectResponseDataProvider(): array
     {
         $responseTextPlainNoBody = new HttpResponse(200, ['content-type' => 'text/plain']);
         $responseApplicationJsonNoBody = new HttpResponse(200, ['content-type' => 'application/json']);

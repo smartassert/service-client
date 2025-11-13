@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace SmartAssert\ServiceClient\Tests\Unit\Response;
 
 use GuzzleHttp\Psr7\Response as HttpResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SmartAssert\ServiceClient\Exception\InvalidResponseDataException;
 use SmartAssert\ServiceClient\Response\JsonResponse;
 
 class JsonResponseTest extends TestCase
 {
-    /**
-     * @dataProvider getDataThrowsExceptionDataProvider
-     */
+    #[DataProvider('getDataThrowsExceptionDataProvider')]
     public function testGetDataThrowsException(JsonResponse $response, \Exception $expected): void
     {
         $this->expectExceptionObject($expected);
@@ -24,7 +23,7 @@ class JsonResponseTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getDataThrowsExceptionDataProvider(): array
+    public static function getDataThrowsExceptionDataProvider(): array
     {
         return [
             'http response body is not json' => [
@@ -51,10 +50,9 @@ class JsonResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider getDataDataProvider
-     *
      * @param array<mixed> $expected
      */
+    #[DataProvider('getDataDataProvider')]
     public function testGetDataSuccess(JsonResponse $response, array $expected): void
     {
         self::assertEquals($expected, $response->getData());
@@ -63,7 +61,7 @@ class JsonResponseTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getDataDataProvider(): array
+    public static function getDataDataProvider(): array
     {
         return [
             'empty json array' => [

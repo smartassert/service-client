@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace SmartAssert\ServiceClient\Tests\Unit\Response;
 
 use GuzzleHttp\Psr7\Response as HttpResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SmartAssert\ServiceClient\Response\Response;
 
 class ResponseTest extends TestCase
 {
-    /**
-     * @dataProvider isSuccessfulDataProvider
-     */
+    #[DataProvider('isSuccessfulDataProvider')]
     public function testIsSuccessful(Response $response, bool $expected): void
     {
         self::assertSame($expected, $response->isSuccessful());
@@ -21,7 +20,7 @@ class ResponseTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function isSuccessfulDataProvider(): array
+    public static function isSuccessfulDataProvider(): array
     {
         return [
             '100 is successful' => [
