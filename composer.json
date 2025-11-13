@@ -45,21 +45,22 @@
         "smartassert/security-token-extractor": "^1.0"
     },
     "require-dev": {
+        "guzzlehttp/guzzle": "^7.4",
+        "mockery/mockery": "^1.5",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-mockery": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^4.0",
-        "phpstan/phpstan": "^1.12",
-        "guzzlehttp/guzzle": "^7.4",
         "symfony/uid": "^6.1",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-phpunit": "^1.1",
-        "webignition/http-history-container": "^4.0",
-        "mockery/mockery": "^1.5",
-        "phpstan/phpstan-mockery": "^1.1",
-        "phpstan/phpstan-deprecation-rules": "^1.2"
+        "webignition/http-history-container": "^4.0"
     },
     "minimum-stability":"stable",
     "prefer-stable":true,
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "phpstan/extension-installer": true
         }
