@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SmartAssert\ServiceClient\Tests\Unit\ExceptionFactory;
 
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\NetworkExceptionInterface;
-use Psr\Http\Message\RequestInterface;
 use SmartAssert\ServiceClient\Exception\CurlException;
 use SmartAssert\ServiceClient\Exception\CurlExceptionInterface;
 use SmartAssert\ServiceClient\ExceptionFactory\CurlExceptionFactory;
@@ -33,41 +33,41 @@ class CurlExceptionFactoryTest extends TestCase
     {
         $connectExceptionCurlCode6EmptyMessage = new ConnectException(
             'cURL error 6',
-            \Mockery::mock(RequestInterface::class),
+            new Request('GET', 'http://example.com/'),
         );
 
         $connectExceptionCurlCode6NonEmptyMessage = new ConnectException(
             'cURL error 9: error 9 message',
-            \Mockery::mock(RequestInterface::class),
+            new Request('GET', 'http://example.com/'),
         );
 
         $connectExceptionCurlCode54NonEmptyMessage = new ConnectException(
             'cURL error 54: error 54 message',
-            \Mockery::mock(RequestInterface::class),
+            new Request('GET', 'http://example.com/'),
         );
 
         $connectExceptionCurlCode128NonEmptyMessage = new ConnectException(
             'cURL error 128: error 128 message',
-            \Mockery::mock(RequestInterface::class),
+            new Request('GET', 'http://example.com/'),
         );
 
         $connectExceptionCurlErrorPrefixWithinMessage = new ConnectException(
             'cURL error 128: cURL error 128: error 128 message',
-            \Mockery::mock(RequestInterface::class),
+            new Request('GET', 'http://example.com/'),
         );
 
         return [
             'code part does not start with "cURL error "' => [
                 'networkException' => new ConnectException(
                     md5((string) rand()),
-                    \Mockery::mock(RequestInterface::class),
+                    new Request('GET', 'http://example.com/'),
                 ),
                 'expected' => null,
             ],
             'code part does not end with integer value' => [
                 'networkException' => new ConnectException(
                     'cURL error foo: invalid curl code',
-                    \Mockery::mock(RequestInterface::class),
+                    new Request('GET', 'http://example.com/'),
                 ),
                 'expected' => null,
             ],
