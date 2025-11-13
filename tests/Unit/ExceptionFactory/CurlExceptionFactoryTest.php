@@ -30,7 +30,7 @@ class CurlExceptionFactoryTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function createFromNetworkExceptionDataProvider(): array
+    public static function createFromNetworkExceptionDataProvider(): array
     {
         $connectExceptionCurlCode6EmptyMessage = new ConnectException(
             'cURL error 6',

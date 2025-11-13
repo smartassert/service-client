@@ -31,7 +31,7 @@ class RequestFactoryTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         $method = md5((string) rand());
         $url = 'https://example.com/' . md5((string) rand());

@@ -21,7 +21,7 @@ class ResponseTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function isSuccessfulDataProvider(): array
+    public static function isSuccessfulDataProvider(): array
     {
         return [
             '100 is successful' => [

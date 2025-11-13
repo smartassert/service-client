@@ -24,7 +24,7 @@ class JsonResponseTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getDataThrowsExceptionDataProvider(): array
+    public static function getDataThrowsExceptionDataProvider(): array
     {
         return [
             'http response body is not json' => [
@@ -63,7 +63,7 @@ class JsonResponseTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getDataDataProvider(): array
+    public static function getDataDataProvider(): array
     {
         return [
             'empty json array' => [

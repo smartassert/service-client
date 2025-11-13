@@ -81,7 +81,7 @@ class ClientTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function sendRequestCreatesCorrectHttpRequestDataProvider(): array
+    public static function sendRequestCreatesCorrectHttpRequestDataProvider(): array
     {
         $textPlainPayload = 'text plain payload';
         $jsonPayloadData = ['key1' => 'value1', 'key2' => 'value2'];
@@ -178,7 +178,7 @@ class ClientTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function sendRequestCreatesCorrectResponseDataProvider(): array
+    public static function sendRequestCreatesCorrectResponseDataProvider(): array
     {
         $responseTextPlainNoBody = new HttpResponse(200, ['content-type' => 'text/plain']);
         $responseApplicationJsonNoBody = new HttpResponse(200, ['content-type' => 'application/json']);
